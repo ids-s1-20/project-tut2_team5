@@ -1,6 +1,6 @@
-Project proposal
+Sabermetrics
 ================
-Team name
+tut2\_team5
 
 ``` r
 library(tidyverse)
@@ -9,6 +9,34 @@ library(broom)
 
 ## 1\. Introduction
 
-## 2\. Data
+The use of data science techniques to study player performance is called
+[“Sabermetrics”](https://en.wikipedia.org/wiki/Sabermetrics). It’s used
+by professionals within the industry to make decisions regarding team
+roster changes and by amateurs interested in studying the game (or
+betting on outcomes).
+
+There is no shortage of data for sabermetrics; there is more data than
+anyone could ever pour through on everything from player stats to the
+play-by-play of every US professional game from the past hundred years.
+
+There are a few sources we can go for. However,
+[Retrosheet](retrosheet.org) seems like our best place. It’s the result
+of a small army of volunteers, combing historical sources to try to
+re-create the play-by-play of every game in baseball history and
+digitizing it for download and analysis.
+
+# 2\. Data
+
+For example, this the dataset for the game log for the 2019 which you
+can download from [here]()
 
 ## 3\. Data analysis plan
+
+We are interested in looking at a sampling of some of the most studied
+offensive and defensive statistics (RBI, OBP, OPS, wOBA, wRC, wRAA, OAA,
+Catch Probability, DRS, UZR, etc.). We could compare each team’s
+postseason roster from 2020 and see how well each of these stats
+predicted a team’s success in the postseason. If we’ve got extra time we
+could run the process for a few different seasons. Conversely, if it’s
+too much work we might consider cutting defensive stats since they seem
+like they might be a hassle to calculate.
