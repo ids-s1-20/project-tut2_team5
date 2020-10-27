@@ -3,25 +3,20 @@ Project proposal
 tut2\_team5
 
 ``` r
-library(tidyverse)
-library(broom)
-library(skimr)
-```
-
-``` r
 people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
-batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv")
-```
 
-    ## Warning: 87292 parsing failures.
-    ##  row col           expected actual                                                           file
-    ## 1999 HBP 1/0/T/F/TRUE/FALSE      2 '/cloud/project/data/baseballdatabank-master/core/Batting.csv'
-    ## 2001 HBP 1/0/T/F/TRUE/FALSE      2 '/cloud/project/data/baseballdatabank-master/core/Batting.csv'
-    ## 2020 HBP 1/0/T/F/TRUE/FALSE      2 '/cloud/project/data/baseballdatabank-master/core/Batting.csv'
-    ## 2022 HBP 1/0/T/F/TRUE/FALSE      2 '/cloud/project/data/baseballdatabank-master/core/Batting.csv'
-    ## 2027 HBP 1/0/T/F/TRUE/FALSE      5 '/cloud/project/data/baseballdatabank-master/core/Batting.csv'
-    ## .... ... .................. ...... ..............................................................
-    ## See problems(...) for more details.
+batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
+                    col_types = cols(HBP = col_integer(), 
+                                     SH  = col_integer(),
+                                     SF  = col_integer(),
+                                     IBB  = col_integer(),
+                                     .default = "?"))
+
+# Make sure you choose the right type before loading a dataset.
+# read_csv() determines the type from the first 1000 entries.
+# e.g. HBP is usually 0 or 1 for most so it thinks it is a logical.
+# However, later in the dataset it sees a 2 so it throws a parsing error.
+```
 
 ## 1\. Introduction
 
@@ -51,6 +46,8 @@ In the course of this project we won’t cover data from before the league
 and teams started keeping computer records, so the data we cover will
 entirely originate from these official records.
 
+## 2\. Data
+
 Information regarding the licensing of this data can be found in
 `/project/data/baseballdatabank-master/README.txt`
 
@@ -76,8 +73,7 @@ skim(batting_demo)
 | Column type frequency:                           |               |
 | character                                        | 16            |
 | Date                                             | 2             |
-| logical                                          | 4             |
-| numeric                                          | 23            |
+| numeric                                          | 27            |
 | \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |               |
 | Group variables                                  | None          |
 
@@ -111,15 +107,6 @@ Data summary
 | debut          |        198 |              1 | 1871-05-04 | 2020-09-27 | 1970-09-12 |     10572 |
 | finalGame      |        198 |              1 | 1871-05-05 | 2020-09-27 | 1981-09-29 |      9479 |
 
-**Variable type: logical**
-
-| skim\_variable | n\_missing | complete\_rate | mean | count                  |
-| :------------- | ---------: | -------------: | ---: | :--------------------- |
-| IBB            |      50506 |           0.53 | 0.11 | FAL: 51049, TRU: 6275  |
-| HBP            |      25559 |           0.76 | 0.16 | FAL: 68701, TRU: 13570 |
-| SH             |      41404 |           0.62 | 0.21 | FAL: 52693, TRU: 13733 |
-| SF             |      53068 |           0.51 | 0.14 | FAL: 46823, TRU: 7939  |
-
 **Variable type: numeric**
 
 | skim\_variable | n\_missing | complete\_rate |    mean |     sd |   p0 |  p25 |  p50 |  p75 | p100 | hist  |
@@ -146,6 +133,10 @@ Data summary
 | CS             |      23942 |           0.78 |    1.19 |   2.70 |    0 |    0 |    0 |    1 |   42 | ▇▁▁▁▁ |
 | BB             |        401 |           1.00 |   12.95 |  20.68 |    0 |    0 |    2 |   18 |  232 | ▇▁▁▁▁ |
 | SO             |       2501 |           0.98 |   20.68 |  28.61 |    0 |    1 |    9 |   29 |  223 | ▇▁▁▁▁ |
+| IBB            |      37052 |           0.66 |    1.07 |   2.73 |    0 |    0 |    0 |    1 |  120 | ▇▁▁▁▁ |
+| HBP            |       3218 |           0.97 |    1.06 |   2.30 |    0 |    0 |    0 |    1 |   51 | ▇▁▁▁▁ |
+| SH             |       6470 |           0.94 |    2.23 |   4.18 |    0 |    0 |    0 |    3 |   67 | ▇▁▁▁▁ |
+| SF             |      36505 |           0.66 |    1.04 |   1.94 |    0 |    0 |    0 |    1 |   19 | ▇▁▁▁▁ |
 | GIDP           |      25842 |           0.76 |    2.93 |   4.70 |    0 |    0 |    0 |    4 |   36 | ▇▁▁▁▁ |
 
 ## 3\. Data analysis plan

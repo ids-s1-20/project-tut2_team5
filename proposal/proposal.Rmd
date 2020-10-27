@@ -4,15 +4,26 @@ author: "tut2_team5"
 output: github_document
 ---
 
-```{r load-packages, message = FALSE}
+```{r load-packages, message = FALSE, echo = FALSE}
 library(tidyverse)
 library(broom)
 library(skimr)
 ```
 
-```{r load-data, message = FALSE}
+```{r load-data, message = FALSE, echo = FALSE}
 people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
-batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv")
+
+batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
+                    col_types = cols(HBP = col_integer(), 
+                                     SH  = col_integer(),
+                                     SF  = col_integer(),
+                                     IBB  = col_integer(),
+                                     .default = "?"))
+
+# Make sure you choose the right type before loading a dataset.
+# read_csv() determines the type from the first 1000 entries.
+# e.g. HBP is usually 0 or 1 for most so it thinks it is a logical.
+# However, later in the dataset it sees a 2 so it throws a parsing error.
 ```
 
 ## 1. Introduction
@@ -26,11 +37,13 @@ The datasets we are going to use were compiled by an organization Chadwick Baseb
 
 In the course of this project we won't cover data from before the league and teams started keeping computer records, so the data we cover will entirely originate from these official records.
 
+## 2. Data
+
 Information regarding the licensing of this data can be found in ```/project/data/baseballdatabank-master/README.txt```
 
 The dataset is large and is composed of 29 csv files. For convenience, I'll only include a skim of player data joined with batting data. 
 
-```{r}
+```{r, message = FALSE, echo = FALSE}
 batting_demo <- full_join(people, batting)
 skim(batting_demo)
 ```
