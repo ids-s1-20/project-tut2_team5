@@ -21,7 +21,7 @@ founded to support baseball professionals and analysts by providing tidy
 baseball data. We create value for our clients and for the community by
 allowing users to focus on understanding and acting on information,
 rather than spending their time compiling and integrating it.” The CBB
-dataset includes data from [Retrosheet](retrosheet.org), another
+dataset includes data from [Retrosheet](http://retrosheet.org/), another
 organization dedicated to providing baseball data. Much of this compiled
 data was originally collected from MLB teams and the league itself, with
 other sources such as sportswriters contributing to game data.
