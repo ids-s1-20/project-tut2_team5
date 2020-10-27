@@ -11,3 +11,57 @@ using the following format.
 - `variable2`: Description of variable 2
 - `variable3`: Description of variable 3
 - ...
+
+## People.csv
+
+20,090 rows x 24 columns
+
+- `playerID` : Used to identify each player. In the format first name +
+               surname initial + two digit number for duplicates e.g. "mohamada01"
+
+- `birthYear` : Birth year e.g. 1982
+
+- `birthMonth` : Birth month e.g. 12 for December
+
+- `birthDay` : Birth month e.g. 25
+
+- `birthCountry`: Country of Birth e.g. "USA" or "D.R."
+
+- `birthState`: Two letter code for US state e.g. "NY" or part of the country if
+                player is born outside the US e.g. "Sinaloa"
+
+- `birthCity` : Birth city e.g. "Chicago"
+
+- `deathYear` : Death year e.g. 1984 or NA if player is still alive
+
+- `deathMonth` : Death month e.g. 12 or NA if player is still alive
+
+- `deathDay` : Death day e.g. 25 or NA if player is still alive
+
+- `deathCountry` : Death country e.g. "USA" or NA if player is still alive
+
+- `deathState` : Death state e.g. "NY"/"Sinaloa" or NA if player is still alive
+
+- `deathCity` : Death city e.g. "Chicago" or NA if player is still alive
+
+- `nameFirst` : First name e.g. "John"
+
+- `nameLast` : Surname e.g. "Smith"
+
+- `nameGiven` : Full name e.g. "John Smith"
+
+- `weight` : Weight in lbs e.g. 212
+
+- `height` : Height in inches e.g. 72
+
+- `bats` : Hand which players bats with. Either "R" or "L".
+
+- `throws` : Hand which players throws with. Either "R" or "L". 
+
+- `debut` : Date of first game e.g. 1982-12-25 in YYYY-MM-DD format
+
+- `finalGame` : Date of final game e.g. 1982-12-25 in YYYY-MM-DD format
+
+- `retroID` : Player's ID used in [Retrosheets](https://www.retrosheet.org/) datasets
+
+- `bbrefID` : Player's ID used in [Baseball Reference](https://www.baseball-reference.com/) datasets
