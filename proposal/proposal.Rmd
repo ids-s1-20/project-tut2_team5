@@ -1,5 +1,5 @@
 ---
-title: "Sabermetrics"
+title: "Project proposal"
 author: "tut2_team5"
 output: github_document
 ---
@@ -7,25 +7,37 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse)
 library(broom)
+library(skimr)
+```
+
+```{r load-data, message = FALSE}
+people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
+batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv")
 ```
 
 ## 1. Introduction
 
-The use of data science techniques to study player performance is called ["Sabermetrics"](https://en.wikipedia.org/wiki/Sabermetrics). It's used by professionals within the industry to make decisions regarding team roster changes and by amateurs interested in studying the game (or betting on outcomes).
+*"I made baseball as much fun as doing your taxes."* 
+- Bill James, father of modern Sabermetrics (The Simpsons S22E03 "MoneyBART")
 
+Statistical study of baseball (also known as Sabermetrics or SABRmetrics) has become an increasingly popular tool both for fans seeking to understand the game and for organizations seeking to optimize their rosters and build better teams. Our group will look at how effectively different measurements for evaluating individual player performance predict team success.
 
-There is no shortage of data for sabermetrics; there is more data than anyone could ever pour through on everything from player stats to the play-by-play of every US professional game from the past hundred years.
+The datasets we are going to use were compiled by an organization Chadwick Baseball Bureau. From their [webpage](http://chadwick-bureau.com/): "Chadwick Baseball Bureau was founded to support baseball professionals and analysts by providing tidy baseball data. We create value for our clients and for the community by allowing users to focus on understanding and acting on information, rather than spending their time compiling and integrating it." The CBB dataset includes data from [Retrosheet](retrosheet.org), another organization dedicated to providing baseball data. Much of this compiled data was originally collected from MLB teams and the league itself, with other sources such as sportswriters contributing to game data. 
 
-There are a few sources we can go for. However, [Retrosheet](retrosheet.org) seems like our best place. It’s the result of a small army of volunteers, combing historical sources to try to re-create the play-by-play of every game in baseball history and digitizing it for download and analysis.
+In the course of this project we won't cover data from before the league and teams started keeping computer records, so the data we cover will entirely originate from these official records.
 
-# 2. Data
+Information regarding the licensing of this data can be found in ```/project/data/baseballdatabank-master/README.txt```
 
-For example, this the dataset for the game log for the 2019 which you can download from [here](https://www.retrosheet.org/gamelogs/index.html).
+The dataset is large and is composed of 29 csv files. For convenience, I'll only include a skim of player data joined with batting data. 
 
-**I cannot manage to get it on here quite yet**
+```{r}
+batting_demo <- full_join(people, batting)
+skim(batting_demo)
+```
+
 
 ## 3. Data analysis plan
 
-We are interested in looking at a sampling of some of the most studied offensive and defensive statistics (RBI, OBP, OPS, wOBA, wRC, wRAA, OAA, Catch Probability, DRS, UZR, etc.). We could compare each team's postseason roster from 2020 and see how well each of these stats predicted a team's success in the postseason. 
+We will look at the effectiveness of different player stats in predicting team success. To begin with, the dataset only includes basic statistics. Most of the stats we're interested in (OBP, OPS, wOBA, wRC, wRAA, etc.) will have to be calculated from these basic statistics. In order to simplify the data, we'll use player rosters to find mean value and other summary statistics for each variable for each team over time. Plotting each team's mean value for each variable against game outcomes to gauge strength of association should provide a starting point for assessing the effectiveness of each variable in predicting game outcomes. We can follow up by looking for possible confounding variables and controlling for them (e.g. possible impact of morale on team performance could be gauged by looking into win/loss streaks and comparing home vs. away game performance).
 
 If we've got extra time we could run the process for a few different seasons. Conversely, if it's too much work we might consider cutting defensive stats since they seem like they might be a hassle to calculate.
