@@ -2,22 +2,6 @@ Project proposal
 ================
 tut2\_team5
 
-``` r
-people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
-
-batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
-                    col_types = cols(HBP = col_integer(), 
-                                     SH  = col_integer(),
-                                     SF  = col_integer(),
-                                     IBB  = col_integer(),
-                                     .default = "?"))
-
-# Make sure you choose the right type before loading a dataset.
-# read_csv() determines the type from the first 1000 entries.
-# e.g. HBP is usually 0 or 1 for most so it thinks it is a logical.
-# However, later in the dataset it sees a 2 so it throws a parsing error.
-```
-
 ## 1\. Introduction
 
 *“I made baseball as much fun as doing your taxes.”* - Bill James,
@@ -53,16 +37,6 @@ Information regarding the licensing of this data can be found in
 
 The dataset is large and is composed of 29 csv files. For convenience,
 I’ll only include a skim of player data joined with batting data.
-
-``` r
-batting_demo <- full_join(people, batting)
-```
-
-    ## Joining, by = "playerID"
-
-``` r
-skim(batting_demo)
-```
 
 |                                                  |               |
 | :----------------------------------------------- | :------------ |
