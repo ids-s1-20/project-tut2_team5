@@ -4,8 +4,10 @@ tut2\_team5
 
 ## 1\. Introduction
 
-*“I made baseball as much fun as doing your taxes.”* - Bill James,
-father of modern Sabermetrics (The Simpsons S22E03 “MoneyBART”)
+> *“I made baseball as much fun as doing your taxes.”*
+> 
+>   - Bill James, father of modern Sabermetrics (The Simpsons S22E03
+>     “MoneyBART”)
 
 Statistical study of baseball (also known as Sabermetrics or
 SABRmetrics) has become an increasingly popular tool both for fans
@@ -133,3 +135,59 @@ If we’ve got extra time we could run the process for a few different
 seasons. Conversely, if it’s too much work we might consider cutting
 defensive stats since they seem like they might be a hassle to
 calculate.
+
+### Preliminary Data Analysis
+
+From
+\[Wikipedia\]\[<https://en.wikipedia.org/wiki/On-base_percentage>\]:
+On-base percentage (OBP), also known as on-base average/OBA, measures
+how frequently a batter reaches base.
+
+OBP can be calculated using the following formula:
+
+![obp](http://www.sciweavers.org/tex2img.php?eq=OBP%20%3D%20%5Cfrac%7BH%20%2B%20BB%20%2B%20HBP%7D%7BAB%20%2B%20BB%20%2B%20HBP%20%2B%20SF%7D&bc=White&fc=Black&im=png&fs=12&ff=arev&edit=0)
+
+``` r
+obps <- batting %>%
+  mutate(OBP = (H + BB + HBP)/(AB + BB + HBP + SF)) %>%
+  filter(!is.na(OBP)) %>%
+  select(playerID, OBP) %>%
+  group_by(playerID) %>% # We have the OBPs of all years instead,
+  summarize(OBP = mean(OBP)) # we only want the mean of all seasons
+```
+
+    ## `summarise()` ungrouping output (override with `.groups` argument)
+
+After calculating OBP, we can look at its relationship with other
+factors e.g. I chose number of awards given to a player from
+`AwardsPlayers.csv` like this:
+
+``` r
+awards <- read_csv("/cloud/project/data/baseballdatabank-master/core/AwardsPlayers.csv",
+                   col_types = cols(tie = col_character(), 
+                                     .default = "?"))
+
+num_awards <- count(awards, playerID)
+```
+
+and then we could merge the two columns by playerID (awards & obp).
+
+``` r
+obp_awards <- merge(obps, num_awards)
+
+#remove the entry that has OBP 1 bc it is impossible 
+#highest ever was .48
+obp_awards <- obp_awards %>%
+  filter(0 < OBP && OBP < .5)
+```
+
+Finally, we could plot them together to visualise the relationship.
+
+``` r
+ggplot(obp_awards, aes(x = OBP, y = n)) + 
+  ggtitle("OBP Against Number of Awards Recieved") +
+  ylab("Number of Awards Recieved") + 
+  geom_point(size = 1.2, alpha = 0.35)
+```
+
+![](proposal_files/figure-gfm/plot-obp-awards-1.png)<!-- -->
