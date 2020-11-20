@@ -1,0 +1,36 @@
+---
+title: "Project testbed"
+subtitle: "I needed a convenient place to mess around with the data sets a bit"
+author: "tut2_team5"
+output: github_document
+---
+
+```{r load-packages, message = FALSE, echo = FALSE}
+library(tidyverse)
+library(broom)
+library(skimr)
+```
+
+```{r load-data, message = FALSE, echo = FALSE}
+people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
+
+batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
+                    col_types = cols(HBP = col_integer(), 
+                                     SH  = col_integer(),
+                                     SF  = col_integer(),
+                                     IBB  = col_integer(),
+                                     .default = "?"))
+
+# Make sure you choose the right type before loading a dataset.
+# read_csv() determines the type from the first 1000 entries.
+# e.g. HBP is usually 0 or 1 for most so it thinks it is a logical.
+# However, later in the dataset it sees a 2 so it throws a parsing error.
+
+#copied above from project proposal lmao
+fielding <- read_csv("/cloud/project/data/baseballdatabank-master/core/Fielding.csv",
+                     col_types = cols(lgID = col_character(), 
+                                     WP  = col_integer(),
+                                     ZR  = col_double(),
+                                     .default = "?"))
+#will have to go through to make sure everything is saved as the right data type (i.e. no doubles are saved as integers)
+```

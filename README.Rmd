@@ -1,6 +1,6 @@
 ---
-title: Project title
-author: by Team name
+title: Analysis of SABRmetric Statistics
+author: by tut2_team5
 output: github_document
 ---
 
@@ -36,3 +36,11 @@ If you got your data off the web, make sure to note the retrieval date.
 ## References
 
 List any references here. You should, at a minimum, list your data source.
+
+data pulled from following sources (will write up proper citations later):
+
+https://www.retrosheet.org/
+
+http://chadwick-bureau.com/open-data/
+
+https://www.baseball-reference.com/
