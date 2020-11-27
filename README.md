@@ -41,8 +41,12 @@ source.
 data pulled from following sources (will write up proper citations
 later):
 
+<https://sabr.org/sabermetrics/>
+
 <https://www.retrosheet.org/>
 
 <http://chadwick-bureau.com/open-data/>
 
 <https://www.baseball-reference.com/>
+
+<https://www.fangraphs.com>
