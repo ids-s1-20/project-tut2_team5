@@ -1,7 +1,7 @@
 ---
 title: "Project testbed"
 subtitle: "I needed a convenient place to mess around with the data sets a bit"
-author: "tut2_team5"
+author: "A. Warren (theoretically other members of tut2_team5 as well, but I'll leave it to them to add their names if they end up doing any work on this particular rmd)"
 output: github_document
 ---
 
@@ -9,13 +9,15 @@ output: github_document
 library(tidyverse)
 library(broom)
 library(skimr)
+library(dplyr)
 ```
 
 ```{r load-data, message = FALSE, echo = FALSE}
 people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
 
 batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
-                    col_types = cols(HBP = col_integer(), 
+                    col_types = cols(yearID = col_integer(),
+                                     HBP = col_integer(), 
                                      SH  = col_integer(),
                                      SF  = col_integer(),
                                      IBB  = col_integer(),
@@ -26,11 +28,29 @@ batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.cs
 # e.g. HBP is usually 0 or 1 for most so it thinks it is a logical.
 # However, later in the dataset it sees a 2 so it throws a parsing error.
 
-#copied above from project proposal lmao
-fielding <- read_csv("/cloud/project/data/baseballdatabank-master/core/Fielding.csv",
+#copied above from project proposal lmao - A.
+
+#now the fielding data (thanks again Mo for dealing with the data scraping)
+fielding <- read_csv("/cloud/project/data/fielding.csv",
                      col_types = cols(lgID = col_character(), 
                                      WP  = col_integer(),
                                      ZR  = col_double(),
                                      .default = "?"))
-#will have to go through to make sure everything is saved as the right data type (i.e. no doubles are saved as integers)
+#will have to go through to make sure everything is saved as the right data type
+#(i.e. no doubles are saved as integers)
+
+#Just going to do my work here then save the finalized dataframe as a csv since 
+#that's easier. I can copy-paste the finished code to the presentation document 
+#later lol - A.
+
+#I suppose step 1 is cutting batting data down to just the relevant years
+batting %>%
+  filter(yearID == 1998:2019) -> batting_cut
+
+#now to get averages for each team
+batting_cut %>%
+  group_by(teamID, yearID) %>%
+  summarise()
+#might need to just get wOBA, wRC+, wRAA from fangraphs, since it seems like
+#those stats will be a pain to calculate too
 ```
