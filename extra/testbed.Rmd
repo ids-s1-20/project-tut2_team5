@@ -10,18 +10,19 @@ library(tidyverse)
 library(broom)
 library(skimr)
 library(dplyr)
+library(naniar)
 ```
 
-```{r load-data, message = FALSE, echo = FALSE}
+```{r exploration, message = FALSE, echo = FALSE}
 people <- read_csv("/cloud/project/data/baseballdatabank-master/core/People.csv")
 
-batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
-                    col_types = cols(yearID = col_integer(),
-                                     HBP = col_integer(), 
-                                     SH  = col_integer(),
-                                     SF  = col_integer(),
-                                     IBB  = col_integer(),
-                                     .default = "?"))
+# batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.csv",
+#                     col_types = cols(yearID = col_integer(),
+#                                      HBP = col_integer(), 
+#                                      SH  = col_integer(),
+#                                      SF  = col_integer(),
+#                                      IBB  = col_integer(),
+#                                      .default = "?"))
 
 # Make sure you choose the right type before loading a dataset.
 # read_csv() determines the type from the first 1000 entries.
@@ -30,27 +31,61 @@ batting <- read_csv("/cloud/project/data/baseballdatabank-master/core/Batting.cs
 
 #copied above from project proposal lmao - A.
 
-#now the fielding data (thanks again Mo for dealing with the data scraping)
-fielding <- read_csv("/cloud/project/data/fielding.csv",
-                     col_types = cols(lgID = col_character(), 
-                                     WP  = col_integer(),
-                                     ZR  = col_double(),
-                                     .default = "?"))
-#will have to go through to make sure everything is saved as the right data type
-#(i.e. no doubles are saved as integers)
+#Turns out we're just going to use the FanGraphs data, since most of the
+#important stats are a massive pain in the ass to calculate.
 
-#Just going to do my work here then save the finalized dataframe as a csv since 
-#that's easier. I can copy-paste the finished code to the presentation document 
-#later lol - A.
-
-#I suppose step 1 is cutting batting data down to just the relevant years
-batting %>%
-  filter(yearID == 1998:2019) -> batting_cut
-
-#now to get averages for each team
-batting_cut %>%
-  group_by(teamID, yearID) %>%
-  summarise()
-#might need to just get wOBA, wRC+, wRAA from fangraphs, since it seems like
-#those stats will be a pain to calculate too
 ```
+
+
+```{r fielding}
+#Starting with fielding
+fielding <- read_csv("/cloud/project/data/player-fielding.csv",
+                     col_types = cols(drs = col_integer(), 
+                                      arm = col_double(), 
+                                      dpr  = col_double(),
+                                      rng_r  = col_double(),
+                                      err_r  = col_double(),
+                                      uzr  = col_double(),
+                                      uzr150  = col_double(),
+                                      def  = col_double(),
+                                      .default = "?"))
+#It initially wanted to list all the important variables as boolean lmao
+
+#cut out duplicate outfield stats
+
+fielding %>%
+  filter(pos %in% c("OF","1B","2B","3B","SS","C")) -> fielding_drop_dupes
+
+#Now for teams stats. Going to take a weighted mean to account for the fact that
+#some players play in more games/innings than others. Using inning since that's
+#the lowest division of game participation we have. None of the stats quite take
+#play time into account the way we want. UZR150, the only one that directly 
+#accounts for play time, is a player's average/expected UZR over 150 games. It's
+#useful for comparing two players to eachother, but what we care about is 
+#overall team performance.
+
+fielding_drop_dupes %>%
+  group_by(team, season) %>%
+  summarise(mean_innings = mean(inn, na.rm = TRUE),
+            mean_drs = weighted.mean(drs, inn, na.rm = TRUE),
+            mean_uzr = weighted.mean(uzr, inn, na.rm = TRUE),
+            mean_uzr150 = weighted.mean(uzr150, inn, na.rm = TRUE),
+            mean_def = weighted.mean(def, inn, na.rm = TRUE)) -> teams_fielding_messy
+
+#Have NaNs for the relevant stats pre-2002, and 0s for DRS in 2002, so I need to
+#replace with NA. Found this package called naniar 
+#https://cran.r-project.org/web/packages/naniar/ that has a function to do that 
+#for me, so I'm going to try it out.
+
+teams_fielding_messy %>%
+  replace_with_na(replace = list(mean_drs = c(NaN, 0.00000000), mean_uzr = NaN, mean_uzr150 = NaN, mean_def = NaN)) -> teams_fielding
+
+#write_csv(teams_fielding, file = "/cloud/project/data/teams-fielding.csv")
+
+```
+
+```{r batting}
+batting <- read_csv("/cloud/project/data/player-batting.csv")
+
+```
+
