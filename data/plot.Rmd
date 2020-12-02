@@ -1,0 +1,150 @@
+---
+title: "Plots"
+author: "Jimmy"
+date: "2020/12/3"
+output: html_document
+---
+
+
+```{r}
+
+teams_cleaned%>%
+  select(win_rate , mean_pa)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_pa))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+```
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_iso)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_iso))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+
+
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_slg)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_slg))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_babip)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_babip))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_obp)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_obp))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_w_oba)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_w_oba))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_w_rc)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_w_rc))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_bsr)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_bsr))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_off)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_off))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_war)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_war))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_innings)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_innings))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_avg)%>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_avg))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+
+```
+
+
+
+
+We can find that variables
+(which have directly relashionship with win_rate):
+                         mean_slg
+                         mean_obp
+                         mean_oba
+                         mean_w_rc
+                         mean_off
+                         mean_war
+
+
+
