@@ -4,10 +4,26 @@ author: "Jimmy"
 date: "2020/12/3"
 output: html_document
 ---
+```{r load-data}
+library(tidyverse)
+library(corrr)
+```
+
+```{r}
+correlate(teams_cleaned)
+```
+
+```{r}
+teams_cleaned%>%
+  select(win_rate , mean_pa) %>%
+  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_pa))+
+    geom_point(size = 1.2, alpha = 0.35)+
+    geom_smooth()+
+    facet_wrap(~ teams_cleaned$season )
+```
 
 
 ```{r}
-
 teams_cleaned%>%
   select(win_rate , mean_pa)%>%
   ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_pa))+
@@ -113,8 +129,8 @@ teams_cleaned%>%
 ```
 
 ```{r}
-teams_cleaned%>%
-  select(win_rate , mean_innings)%>%
+teams_cleaned %>%
+  select(win_rate , mean_innings) %>%
   ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_innings))+
     geom_point(size = 1.2, alpha = 0.35)+
     geom_smooth()+
@@ -125,7 +141,7 @@ teams_cleaned%>%
 
 
 ```{r}
-teams_cleaned%>%
+teams_cleaned %>%
   select(win_rate , mean_avg)%>%
   ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_avg))+
     geom_point(size = 1.2, alpha = 0.35)+
