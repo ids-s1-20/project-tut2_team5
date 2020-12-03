@@ -141,10 +141,71 @@ We can find that variables
 (which have directly relashionship with win_rate):
                          mean_slg
                          mean_obp
-                         mean_oba
+                         mean_w_oba
                          mean_w_rc
                          mean_off
                          mean_war
+                         
+                         
+                         
+```{r}
+teams_cleaned%>%
+  select(team, mean_slg)%>%
+  group_by(team)%>%
+  arrange(desc(mean_slg))
+
+```
+                         
+                         
+```{r}
+teams_cleaned%>%
+  select(team, mean_obp)%>%
+  group_by(team)%>%
+  arrange(desc(mean_obp))
+
+```                         
+                         
+```{r}
+teams_cleaned%>%
+  select(team, mean_w_oba)%>%
+  group_by(team)%>%
+  arrange(desc(mean_w_oba))
+
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(team, mean_w_rc)%>%
+  group_by(team)%>%
+  arrange(desc(mean_w_rc))
+
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(team, mean_off)%>%
+  group_by(team)%>%
+  arrange(desc(mean_off))
+
+```
+
+
+```{r}
+teams_cleaned%>%
+  select(team, mean_war)%>%
+  group_by(team)%>%
+  arrange(desc(mean_war))
+
+```
+
+
+It is clear that Yankees appears most in the first ten of these varibales.
+
+
+
+
 
 
 
