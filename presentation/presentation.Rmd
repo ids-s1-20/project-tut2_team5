@@ -127,6 +127,8 @@ world series or not.
 
 #Team data
 
+class: center, middle
+
 ```{r head, echo = FALSE, messages = FALSE}
 kable(head(teams_cleaned[,1:10]), format = "html")
 ```
@@ -141,21 +143,14 @@ class: inverse, middle, center
 
 #Data Analysis
 
-- We started by looking at each of the 16 variables separately and their relationship with the 
+- We started by looking at each of the 18 variables separately and their relationship with the 
 win rate. 
 
 - and examined the residual vs. fitted plots to assess whether the linear model
-is appropriate.
+is appropriate and evaluated the accuracy of the model predictions.
 
-- and evaluated the accuracy of the model predictions.
-
-- Finally, we created a multi variable model.
-
----
-
-class: inverse, center, middle
-
-# Single Variable Linear Regression
+- For the sake of brevity, we will show the results for four random variables, two
+offensive/batting and two defensive/fielding. The rest will be included in the code.
 
 ---
 
@@ -177,7 +172,7 @@ avg_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(win_rate ~ mean_avg, data = teams_train)
 
-kable(tidy(avg_fit), format = "html")
+kable(tidy(avg_fit)[,1:4], format = "html")
 ```
 ]
 
@@ -198,32 +193,10 @@ kable(glance(avg_fit)[c(1:3)], format = "html")
 
 ---
 
-# Slugging Percentage (SLG)
-
-.pull-left[
-```{r slugging-percentage, echo = FALSE}
-teams_train %>%
-  ggplot(mapping = aes(x = mean_slg , y = win_rate)) +
-  geom_point(size = 1.2, alpha = 0.35) +
-  geom_smooth(method = "lm")
-
-slg_fit <- linear_reg() %>%
-  set_engine("lm") %>%
-  fit(win_rate ~ mean_slg, data = teams_train)
-tidy(slg_fit)
-glance(slg_fit)
-```
-]
-
-.pull-right[
-
-]
-
----
-
 # Isolated Power (ISO)
 
-```{r isolated-power, echo = FALSE}
+.pull-left[
+```{r isolated-power,  message = FALSE, echo = FALSE}
 teams_train %>%
   ggplot(mapping = aes(x = mean_iso , y = win_rate)) +
   geom_point(size = 1.2, alpha = 0.35) +
@@ -232,9 +205,15 @@ teams_train %>%
 iso_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(win_rate ~ mean_iso, data = teams_train)
-tidy(iso_fit)
-glance(iso_fit)
 
+kable(tidy(iso_fit)[,1:4], format = "html")
+
+```
+]
+
+.pull-right[
+```{r res-iso, echo = FALSE, message = FALSE}
+#residuals analysis
 iso_aug <- augment(iso_fit$fit)
 ggplot(data = iso_aug,
        aes(x = .fitted,
@@ -242,61 +221,107 @@ ggplot(data = iso_aug,
   geom_jitter() +
   geom_hline(yintercept = 0,
              linetype = "dashed")
+
+kable(glance(iso_fit)[c(1:3)], format = "html")
 ```
+]
 
 ---
 
-# Tables
+# Ultimate Zone Rating per 150 Games (UZR/150)
 
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
+.pull-left[
+```{r uzr-150, message = FALSE, echo = FALSE, warning = FALSE}
+#It's the same process for every variable, so I'll just walk
+#through the first one.
 
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
+#create graph, add linear model trend line
+teams_train %>%
+  ggplot(mapping = aes(x = mean_uzr150 , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+#linear model, note R squared and adjusted R squared
+uzr150_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_uzr150, data = teams_train_uzr)
+
+kable(tidy(uzr150_fit)[,1:4], format = "html")
 ```
+]
+
+.pull-right[
+```{r res-uzr150, echo = FALSE, message = FALSE, warning = FALSE}
+#residuals analysis
+uzr150_aug <- augment(uzr150_fit$fit)
+ggplot(data = uzr150_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+
+kable(glance(uzr150_fit)[c(1:3)], format = "html")
+```
+]
 
 ---
 
-# Images
+# Wins Above Replacement (WAR)
 
-```{r castle, echo = FALSE, out.width = "60%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
+.pull-left[
+```{r war, message = FALSE, echo = FALSE, warning = FALSE}
+#It's the same process for every variable, so I'll just walk
+#through the first one.
+
+#create graph, add linear model trend line
+teams_train %>%
+  ggplot(mapping = aes(x = mean_war , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+#linear model, note R squared and adjusted R squared
+war_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_war, data = teams_train)
+
+kable(tidy(war_fit)[,1:4], format = "html")
 ```
+]
 
-Or you can also include a full page image. See next slide.
+.pull-right[
+```{r res-war, echo = FALSE, message = FALSE, warning = FALSE}
+#residuals analysis
+war_aug <- augment(war_fit$fit)
+ggplot(data = war_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+
+kable(glance(war_fit)[c(1:3)], format = "html")
+```
+]
 
 ---
 
-background-image: url(https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)
+### Analysis of Plots
+
+- Observation of residual vs. fitted plots shows no discernible patterns, suggesting that the linear model is an adequate fit in all cases. 
+
+- Observation of
+adjusted R squared values shows that the linear models of WAR, Off, and wRC vs
+Win Rate are best able to account for variance in data (values of 0.534, 0.442,
+and 0.445 respectively). 
+
+- Observation of plots does not suggest any cases of low
+R squared resulting from a high number of outliers.
 
 ---
 
-# Math Expressions
+class: inverse, center, middle
 
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
+#THE END 
+## Thanks for listening
 
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.

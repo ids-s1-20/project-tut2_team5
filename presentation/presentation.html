@@ -115,6 +115,8 @@ world series or not.
 
 #Team data
 
+class: center, middle
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -216,21 +218,14 @@ class: inverse, middle, center
 
 #Data Analysis
 
-- We started by looking at each of the 16 variables separately and their relationship with the 
+- We started by looking at each of the 18 variables separately and their relationship with the 
 win rate. 
 
 - and examined the residual vs. fitted plots to assess whether the linear model
-is appropriate.
+is appropriate and evaluated the accuracy of the model predictions.
 
-- and evaluated the accuracy of the model predictions.
-
-- Finally, we created a multi variable model.
-
----
-
-class: inverse, center, middle
-
-# Single Variable Linear Regression
+- For the sake of brevity, we will show the results for four random variables, two
+offensive/batting and two defensive/fielding. The rest will be included in the code.
 
 ---
 
@@ -244,7 +239,6 @@ class: inverse, center, middle
    &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
@@ -253,14 +247,12 @@ class: inverse, center, middle
    &lt;td style="text-align:right;"&gt; -0.0165673 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.0603153 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; -0.2746785 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.7836738 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; mean_avg &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1.9859578 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.2316671 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 8.5724622 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -287,175 +279,174 @@ class: inverse, center, middle
 
 ---
 
-# Slugging Percentage (SLG)
-
-.pull-left[
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-&lt;img src="presentation_files/figure-html/slugging-percentage-1.png" height="10%" /&gt;
-
-```
-## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)  -0.0203    0.0427    -0.477 6.34e- 1
-## 2 mean_slg      1.25      0.102     12.2   2.57e-30
-```
-
-```
-## # A tibble: 1 x 12
-##   r.squared adj.r.squared  sigma statistic  p.value    df logLik    AIC    BIC
-##       &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1     0.225         0.224 0.0627      149. 2.57e-30     1   696. -1386. -1374.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
-]
-
-.pull-right[
-
-]
-
----
-
 # Isolated Power (ISO)
 
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-&lt;img src="presentation_files/figure-html/isolated-power-1.png" height="10%" /&gt;
-
-```
-## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    0.265    0.0226      11.8 1.99e-28
-## 2 mean_iso       1.50     0.143       10.5 2.21e-23
-```
-
-```
-## # A tibble: 1 x 12
-##   r.squared adj.r.squared  sigma statistic  p.value    df logLik    AIC    BIC
-##       &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1     0.176         0.174 0.0647      110. 2.21e-23     1   680. -1354. -1342.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
-
-&lt;img src="presentation_files/figure-html/isolated-power-2.png" height="10%" /&gt;
-
----
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-&lt;table&gt;
+.pull-left[
+&lt;img src="presentation_files/figure-html/isolated-power-1.png" height="10%" /&gt;&lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; Sepal.Length &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Sepal.Width &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Petal.Length &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; Petal.Width &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Species &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2654097 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0225730 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.75783 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.2 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.4 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; setosa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; mean_iso &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.4997725 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1432364 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.47061 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+]
+
+.pull-right[
+&lt;img src="presentation_files/figure-html/res-iso-1.png" height="10%" /&gt;&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj.r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.1760806 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1744745 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0647135 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
 
 ---
 
-# Images
+# Ultimate Zone Rating per 150 Games (UZR/150)
 
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80" alt="Image credit: Photo by Jörg Angeli on Unsplash." width="60%" height="10%" /&gt;
-&lt;p class="caption"&gt;Image credit: Photo by Jörg Angeli on Unsplash.&lt;/p&gt;
-&lt;/div&gt;
+.pull-left[
+&lt;img src="presentation_files/figure-html/uzr-150-1.png" height="10%" /&gt;&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5001291 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0033380 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 149.829561 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mean_uzr150 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0041766 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0008437 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.950642 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
 
-Or you can also include a full page image. See next slide.
+.pull-right[
+&lt;img src="presentation_files/figure-html/res-uzr150-1.png" height="10%" /&gt;&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj.r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.0542821 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0520673 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0691205 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
 
 ---
 
-background-image: url(https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1650&amp;q=80)
+# Wins Above Replacement (WAR)
+
+.pull-left[
+&lt;img src="presentation_files/figure-html/war-1.png" height="10%" /&gt;&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3635982 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0060024 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60.57574 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mean_war &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0778061 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0032015 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24.30285 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+&lt;img src="presentation_files/figure-html/res-war-1.png" height="10%" /&gt;&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj.r.squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.5351698 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5342637 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0486071 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
 
 ---
 
-# Math Expressions
+### Analysis of Plots
 
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &amp;#36;\alpha+\beta$ renders `\(\alpha+\beta\)`. You can use the display style with double dollar signs:
+- Observation of residual vs. fitted plots shows no discernible patterns, suggesting that the linear model is an adequate fit in all cases. 
 
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
+- Observation of
+adjusted R squared values shows that the linear models of WAR, Off, and wRC vs
+Win Rate are best able to account for variance in data (values of 0.534, 0.442,
+and 0.445 respectively). 
 
-`$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$`
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
+- Observation of plots does not suggest any cases of low
+R squared resulting from a high number of outliers.
 
 ---
 
-# Feeling adventurous?
+class: inverse, center, middle
 
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+#THE END 
+## Thanks for listening
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
