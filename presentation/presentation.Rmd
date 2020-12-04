@@ -64,7 +64,7 @@ class: inverse, center, middle
 - Our data was sourced from [retrosheet.org](retrosheet.org) and [fangraphs.com](fangraphs.com)
 
 - We considered only the seasons from 1998-2019 because 1998 is after teams starting
-recording data and 1998 is the first season to have 30 teams.
+recording data digitally and 1998 is the first season to have 30 teams.
 
 - 2020 data was not considered because the season started later and only 60 games
 were played which is much less than usual.
