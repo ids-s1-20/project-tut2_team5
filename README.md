@@ -4,6 +4,32 @@ by tut2\_team5
 
 ## Summary
 
+> *“I made baseball as much fun as doing your taxes.”*
+> 
+>   - Bill James, father of modern Sabermetrics (The Simpsons S22E03
+>     “MoneyBART”)
+
+Statistical study of baseball (also known as Sabermetrics or
+SABRmetrics) has become an increasingly popular tool both for fans
+seeking to understand the game and for organizations seeking to optimize
+their rosters and build better teams. Our group will look at how
+effectively different measurements for evaluating individual player
+performance predict team success.
+
+The datasets used come from two main sources
+[retrosheet.org](retrosheet.org) and [fangraphs.com](fangraphs.com), we
+constrict our sample size to the years 1998-2019 for two main reasons.
+The 30 team MLB format only started in 1998 and by then most teams had
+their data recorded electronically so data is more available and
+reliable. The 2020 season is discarded since, it was started late and
+only 60 games were played which much less than the usual amount of
+matches in a season.
+
+The data from [fangraphs.com](fangraphs.com) had to be web scraped,
+which was a painful process of trial error and error handling. Whereas,
+the retrosheet data was conviently put in dataset by the Chadwick
+bureau.
+
 Write-up of your project and findings go here. Think of this as the text
 of your presentation. The length should be roughly 5 minutes when read
 out loud. Although pacing varies, a 5-minute speech is roughly 750
@@ -22,8 +48,6 @@ make is about the code itself. Your results with proper output and
 graphics go in your presentation, this space is for a brief summary of
 your project.
 
-
-
 ## Presentation
 
 Our presentation can be found [here](presentation/presentation.html).
@@ -36,6 +60,12 @@ on proper citation for datasets. If you got your data off the web, make
 sure to note the retrieval date.
 
 ## References
+
+List any references here. You should, at a minimum, list your data
+source.
+
+data pulled from following sources (will write up proper citations
+later):
 
 <https://sabr.org/sabermetrics/>
 
