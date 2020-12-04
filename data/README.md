@@ -101,3 +101,116 @@ More details about the vairables [here](https://blogs.fangraphs.com/glossary/)
 - `uzr_150` : Ultimate zone rating per 150 games.
 
 - `def` : Defense, Fielding Runs Above Average + positional adjustment.
+
+## player-batting.csv
+
+28911 entries x 21 variables
+
+Each entry contains the most commonly batting stats for each player in a season.
+
+Some players might appear twice in a sesason if they played in different positions.
+
+
+More details about the vairables [here](https://blogs.fangraphs.com/glossary/)
+
+- `team` : Team name.
+
+- `season` : Season year.
+
+- `name` : Name of the player.
+
+- `age` : Age of the player.
+
+- `g` : Number of games in which the player has appeared.
+
+- `pa` : Number of times the player has come to the plate.
+
+- `hr` : Number of home runs.
+
+- `sb` : Number of stolen bases.
+
+- `bb` : Total number of walks (includes IBB).
+
+- `k` : Frequency with which the batter has struck out.
+
+- `iso` : Average number of extra bases per at bat.
+
+- `babip` : The rate at which the batter gets a hit when he puts the ball in play.
+
+- `avg` : Rate of hits per at bat.
+
+- `obp` : Rate at which the batter reaches base.
+
+- `slg` : Average number of total bases per at bat.
+
+- `w_oba` : Combines all the different aspects of hitting into one metric, weighting each of them in proportion to their actual run value.
+
+- `w_rc` : Number of runs a player has generated for his team as a result of his wOBA and playing time.
+
+- `bsr` : Number of runs above or below average a player has been worth on the bases, based on stolen bases, caught stealing, extra bases taken, outs on the bases, and avoiding double plays.
+
+- `off` : Number of runs above or below average a player has been worth offensively, combining Batting Runs and BsR.
+
+- `def` : Number of runs above or below average a player has been worth on defense, combining Fielding Runs (Total Zone before 2002, UZR after) and the positional adjustment.
+
+- `war` :  A comprehensive statistic that estimates the number of wins a player has been worth to his team compared to a freely available player such as a minor league free agent.(more detail about this variable [here](https://library.fangraphs.com/war/war-position-players/))
+
+## teams-cleaned.csv
+
+643 entries x 20 columns
+
+Each entry contains the average stats of the team used in each season.
+Note : The last 4 columns are not calculated until 2002. Also, the teams from row 113 to row 140 still not been calculating in 2002.
+
+More details about the vairables [here](https://blogs.fangraphs.com/glossary/)
+
+- `team` : Team name.
+
+- `season` : Season year.
+
+- `win_rate` : The win rate of the team.
+
+- `mean_pa` : Average of the number of times the player has come to the plate in the team in the season.
+
+- `mean_avg` : Average of the rate of hits per at bat of the team in the season.
+
+- `mean_slg` : Average number of total bases per at bat of the team in the season.
+
+- `mean_iso` : Average number of extra bases per at bat.
+
+- `mean_babip` : Rate at which the batter gets a hit when he puts the ball in play.
+
+- `mean_obp` : Rate at which the batter reaches base.
+
+- `mean_w_oba`: Combines all the different aspects of hitting into one metric, weighting each of them in proportion to their actual run value.
+
+- `mean_w_rc` : Number of runs a player has generated for his team as a result of his wOBA and playing time.
+
+- `mean_bsr` : Number of runs above or below average a player has been worth on the bases, based on stolen bases, caught stealing, extra bases taken, outs on the bases, and avoiding double plays.
+
+- `mean_off` : Number of runs above or below average a player has been worth offensively, combining Batting Runs and BsR.
+
+- `mean_war` : A comprehensive statistic that estimates the number of wins a player has been worth to his team compared to a freely available player such as a minor league free agent.(more detail about this variable [here](https://library.fangraphs.com/war/war-position-players/))
+
+- `mean_innings` : Average of innings.
+
+- `mean_drs` : Defensive runs saved.
+
+- `mean_uzr` : Ultimate zone rating.
+
+- `mean_uzr150` : Ultimate zone rating per 150 games.
+
+- `def` : Defense, Fielding Runs Above Average + positional adjustment.
+
+
+
+
+
+
+
+
+
+
+
+
+
