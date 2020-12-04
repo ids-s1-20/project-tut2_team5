@@ -1,0 +1,395 @@
+---
+title: "Plots"
+author: "A. Warren, Jimmy Hou"
+date: "2020/12/3"
+output: html_document
+---
+```{r load-packages, echo = FALSE, messages = FALSE, results = FALSE, warning = FALSE}
+library(tidyverse)
+library(tidymodels)
+```
+
+```{r load-data, echo = FALSE, messages = FALSE, results = FALSE, warning = FALSE}
+teams_cleaned <- read_csv("/cloud/project/data/teams-cleaned.csv")
+
+#doing training split
+set.seed(3)
+teams_split <- initial_split(teams_cleaned, prop = 0.80)
+teams_train <- training(teams_split)
+teams_test <- testing(teams_split)
+
+#have a lot of NAs for drs and uzr/uzr150/def, so he's something to deal with
+#that:
+teams_train %>%
+  filter(is.na(mean_drs) == FALSE) -> teams_train_drs
+teams_train %>%
+  filter(is.na(mean_uzr) == FALSE) -> teams_train_uzr
+```
+
+### Initial Plots vs Win Rate
+
+With linear models overlayed and residual vs fitted plots. For the time being,
+only considering single-variable regression.
+
+##### Batting Average (AVG)
+
+```{r batting-average, echo = FALSE}
+#It's the same process for every variable, so I'll just walk
+#through the first one.
+
+#create graph, add linear model trendline
+teams_train %>%
+  ggplot(mapping = aes(x = mean_avg , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+#linear model, note R squared and adjusted R squared
+avg_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_avg, data = teams_train)
+tidy(avg_fit)
+glance(avg_fit)
+
+#residuals analysis
+avg_aug <- augment(avg_fit$fit)
+ggplot(data = avg_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Slugging Percentage (SLG)
+
+```{r slugging-percentage, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_slg , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+slg_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_slg, data = teams_train)
+tidy(slg_fit)
+glance(slg_fit)
+
+slg_aug <- augment(slg_fit$fit)
+ggplot(data = slg_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Isolated Power (ISO)
+
+```{r isolated-power, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_iso , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+iso_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_iso, data = teams_train)
+tidy(iso_fit)
+glance(iso_fit)
+
+iso_aug <- augment(iso_fit$fit)
+ggplot(data = iso_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Batting Average on Balls in Play (BABIP)
+
+```{r batting-average-on-balls-in-play, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_babip , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+babip_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_babip, data = teams_train)
+tidy(babip_fit)
+glance(babip_fit)
+
+babip_aug <- augment(babip_fit$fit)
+ggplot(data = babip_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### On Base Percentage (OBP)
+
+```{r on-base-percentage, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_obp , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+obp_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_obp, data = teams_train)
+tidy(obp_fit)
+glance(obp_fit)
+
+obp_aug <- augment(obp_fit$fit)
+ggplot(data = obp_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Weighted On Base Average (wOBA)
+
+```{r weighted-on-base-average, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_w_oba , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+woba_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_w_oba, data = teams_train)
+tidy(woba_fit)
+glance(woba_fit)
+
+woba_aug <- augment(woba_fit$fit)
+ggplot(data = woba_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Weighted Runs Created (wRC)
+
+```{r weighted-runs-created, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_w_rc , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+wrc_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_w_rc, data = teams_train)
+tidy(wrc_fit)
+glance(wrc_fit)
+
+wrc_aug <- augment(wrc_fit$fit)
+ggplot(data = wrc_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Base Runs (BsR)
+
+```{r base-runs, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_bsr , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+bsr_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_bsr, data = teams_train)
+tidy(bsr_fit)
+glance(bsr_fit)
+
+bsr_aug <- augment(bsr_fit$fit)
+ggplot(data = bsr_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Offense (Off)
+
+```{r offense, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_off , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+off_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_off, data = teams_train)
+tidy(off_fit)
+glance(off_fit)
+
+off_aug <- augment(off_fit$fit)
+ggplot(data = off_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Defensive Runs Saved (DRS)
+
+```{r defensive-runs-saved, echo = FALSE}
+teams_train_drs %>%
+  ggplot(mapping = aes(x = mean_drs , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+drs_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_drs, data = teams_train_drs)
+tidy(drs_fit)
+glance(drs_fit)
+
+drs_aug <- augment(drs_fit$fit)
+ggplot(data = drs_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Ultimate Zone Rating (UZR)
+
+```{r ultimate-zone-rating, echo = FALSE}
+teams_train_uzr %>%
+  ggplot(mapping = aes(x = mean_uzr , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+uzr_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_uzr, data = teams_train_uzr)
+tidy(uzr_fit)
+glance(uzr_fit)
+
+uzr_aug <- augment(uzr_fit$fit)
+ggplot(data = uzr_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Ultimate Zone Rating per 150 Games (UZR/150)
+
+```{r uzr-150, echo = FALSE}
+teams_train_uzr %>%
+  ggplot(mapping = aes(x = mean_uzr150 , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+uzr150_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_uzr150, data = teams_train_uzr)
+tidy(uzr150_fit)
+glance(uzr150_fit)
+
+uzr150_aug <- augment(uzr150_fit$fit)
+ggplot(data = uzr150_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Defense (Def)
+
+```{r defense, echo = FALSE}
+teams_train_uzr %>%
+  ggplot(mapping = aes(x = mean_def , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+def_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_def, data = teams_train_uzr)
+tidy(def_fit)
+glance(def_fit)
+
+def_aug <- augment(def_fit$fit)
+ggplot(data = def_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+##### Wins Above Replacement (WAR)
+
+```{r wins-above-replacement, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_war , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+war_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_war, data = teams_train)
+tidy(war_fit)
+glance(war_fit)
+
+war_aug <- augment(war_fit$fit)
+ggplot(data = war_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
+
+
+### Analysis of Initial Plots
+
+Observation of residual vs. fitted plots shows no discernible patterns,
+suggesting that the linear model is an adequate fit in all cases. Observation of
+adjusted R squared values shows that the linear models of WAR, Off, and wRC vs
+Win Rate are best able to account for variance in data (values of 0.534, 0.442,
+and 0.445 respectively). Observation of plots does not suggest any cases of low
+R squared resulting from a high number of outliers.
+
+### Additional Plots
+
+Examining how well the models for WAR, wRC, and Off function as predictors.
+
+```{r wins-above-replacement-prediction, echo = FALSE}
+war_pred <- predict(war_fit, teams_test) %>%
+  bind_cols(teams_test %>% select(win_rate, mean_war))
+tibble(war_pred)
+
+#Not quite sure how to evaluate the accuracy of these predictions, so I'm going 
+#to look at the difference between predicted and actual, then calculate key 
+#summary statistics.
+war_pred %>%
+  mutate(pred_diff = abs(.pred - win_rate)) -> war_pred2
+tibble(war_pred2)
+mean(war_pred2$pred_diff)
+median(war_pred2$pred_diff)
+IQR(war_pred2$pred_diff)
+sd(war_pred2$pred_diff)
+```
+
+
+
+
