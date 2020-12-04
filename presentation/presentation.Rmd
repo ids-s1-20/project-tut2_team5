@@ -1,6 +1,6 @@
 ---
 title: "SABRmetrics"
-subtitle: "making baseball boring"
+subtitle: "making baseball as much fun as doing your taxes"
 author: "tut2_team5 <br> Mohamad, Adam and Jimmy"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
@@ -30,26 +30,96 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 ```{r load-data, include=FALSE}
 # Load your data here
+teams_cleaned <- read_csv("../data/teams-cleaned.csv")
 ```
 
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## We will be using SABRmetrics (the empirical analysis of baseball statistics)
+## to look at how effectively different measurements for evaluating individual player performance predict team success.
 
 ---
 
 class: inverse, center, middle
 
-# Section title
+# Data
 
 ---
 
-# Hello World
+# Sources
 
-- Click the `Knit` button to compile your presentation
+- Our data was sourced from [retrosheet.org](retrosheet.org) and [fangraphs.com](fangraphs.com)
 
-- Make sure to commit and push all resulting files to your GitHub repo
+- We considered only the seasons from 1998-2019 because 1998 is after teams starting
+recording data and 1998 is the first season to have 30 teams.
+
+- 2020 data was not considered because the season started later and only 60 games
+were played which is much less than usual.
+
+- The batting and fielding statistics from fangraphs were webscraped from fangraphs.
+
+- The teams win and performance statistics were downloaded from the Chadwick Bureau
+which was originally sourced from retrosheet.
+
+.footnote[
+  All UZR stats to fangraphs was provided are courtesy of a legend called Michael Lichtman
+]
+
+---
+
+# Web scraping + Clean up
+
+.pull-left[
+- Fangraphs, unfortunately does not have ready to download datasets. However, so
+a script was used to retrieve defensive and field statistics from the website.
+
+- The website allows robots. However, it adds a CAPTCHA wall, if you make too
+many requests so the website is not slowed for other users so it and also there
+were many dead links which made the task much harder and take ages.
+
+```{r captcha-demo}
+tryCatch(
+  expr = { 
+    #scrape the data
+  },
+  error =  function(e){ 
+      if(e[1] == "HTTP error 500."){ 
+        #i.e. page does not exist
+        #do not return anything
+      }else{
+        #stop scraping until I manually 
+        #solve the CAPTCHA
+      }
+  }
+)
+```
+
+
+]
+
+.pull-right[
+
+- Fielding and batting stats were scraped for each player for each season.
+
+- which was later summarised into a smaller dataset that contained the weighted
+average for each stat for each team.
+
+- then joined each teams season statistics to the retrosheet's dataframe
+which contained team performance metrics like win rate and whether they won the
+world series or not.
+
+]
+
+---
+
+#Team data
+
+.right-head[
+```{r head, echo = FALSE}
+head(teams_cleaned)
+```
+]
 
 ---
 

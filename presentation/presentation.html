@@ -4,7 +4,7 @@
     <title>SABRmetrics</title>
     <meta charset="utf-8" />
     <meta name="author" content="tut2_team5   Mohamad, Adam and Jimmy" />
-    <meta name="date" content="2020-12-03" />
+    <meta name="date" content="2020-12-04" />
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
   </head>
@@ -13,10 +13,10 @@
 class: center, middle, inverse, title-slide
 
 # SABRmetrics
-## making baseball boring
+## making baseball as much fun as doing your taxes
 ### tut2_team5 <br> Mohamad, Adam and Jimmy
 ### University of Edinburgh
-### 2020-12-03
+### 2020-12-04
 
 ---
 
@@ -31,21 +31,107 @@ class: center, middle, inverse, title-slide
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## We will be using SABRmetrics (the empirical analysis of baseball statistics)
+## to look at how effectively different measurements for evaluating individual player performance predict team success.
 
 ---
 
 class: inverse, center, middle
 
-# Section title
+# Data
 
 ---
 
-# Hello World
+# Sources
 
-- Click the `Knit` button to compile your presentation
+- Our data was sourced from [retrosheet.org](retrosheet.org) and [fangraphs.com](fangraphs.com)
 
-- Make sure to commit and push all resulting files to your GitHub repo
+- We considered only the seasons from 1998-2019 because 1998 is after teams starting
+recording data and 1998 is the first season to have 30 teams.
+
+- 2020 data was not considered because the season started later and only 60 games
+were played which is much less than usual.
+
+- The batting and fielding statistics from fangraphs were webscraped from fangraphs.
+
+- The teams win and performance statistics were downloaded from the Chadwick Bureau
+which was originally sourced from retrosheet.
+
+.footnote[
+  All UZR stats to fangraphs was provided are courtesy of a legend called Michael Lichtman
+]
+
+---
+
+# Web scraping + Clean up
+
+.pull-left[
+- Fangraphs, unfortunately does not have ready to download datasets. However, so
+a script was used to retrieve defensive and field statistics from the website.
+
+- The website allows robots. However, it adds a CAPTCHA wall, if you make too
+many requests so the website is not slowed for other users so it and also there
+were many dead links which made the task much harder and take ages.
+
+
+```r
+tryCatch(
+  expr = { 
+    #scrape the data
+  },
+  error =  function(e){ 
+      if(e[1] == "HTTP error 500."){ 
+        #i.e. page does not exist
+        #do not return anything
+      }else{
+        #stop scraping until I manually 
+        #solve the CAPTCHA
+      }
+  }
+)
+```
+
+```
+## NULL
+```
+
+
+]
+
+.pull-right[
+
+- Fielding and batting stats were scraped for each player for each season.
+
+- which was later summarised into a smaller dataset that contained the weighted
+average for each stat for each team.
+
+- then joined each teams season statistics to the retrosheet's dataframe
+which contained team performance metrics like win rate and whether they won the
+world series or not.
+
+]
+
+---
+
+#Team data
+
+.right-head[
+
+```
+## # A tibble: 6 x 20
+##   team  season win_rate WSWin mean_pa mean_avg mean_slg mean_iso mean_babip
+##   &lt;chr&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+## 1 ange…   1998    0.525 N        196.    0.271    0.416    0.145      0.307
+## 2 diam…   1998    0.401 N        170.    0.246    0.393    0.146      0.289
+## 3 brav…   1998    0.654 N        183.    0.272    0.452    0.180      0.300
+## 4 orio…   1998    0.488 N        191.    0.272    0.446    0.174      0.291
+## 5 red_…   1998    0.568 N        203.    0.279    0.461    0.182      0.311
+## 6 whit…   1998    0.491 N        242.    0.271    0.444    0.173      0.290
+## # … with 11 more variables: mean_obp &lt;dbl&gt;, mean_w_oba &lt;dbl&gt;, mean_w_rc &lt;dbl&gt;,
+## #   mean_bsr &lt;dbl&gt;, mean_off &lt;dbl&gt;, mean_war &lt;dbl&gt;, mean_innings &lt;dbl&gt;,
+## #   mean_drs &lt;dbl&gt;, mean_uzr &lt;dbl&gt;, mean_uzr150 &lt;dbl&gt;, mean_def &lt;dbl&gt;
+```
+]
 
 ---
 
