@@ -1,227 +1,217 @@
 ---
 title: "Plots"
-author: "Jimmy"
+author: "Jimmy, A. Warren"
 date: "2020/12/3"
 output: html_document
 ---
-```{r load-data}
+```{r load-packages}
 library(tidyverse)
-library(corrr)
+library(tidymodels)
 ```
 
-```{r}
-correlate(teams_cleaned)
-```
+```{r load-data}
+teams_cleaned <- read_csv("/cloud/project/data/teams-cleaned.csv")
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_pa) %>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_pa))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+set.seed(3)
+teams_split <- initial_split(teams_cleaned, prop = 0.80)
+teams_train <- training(teams_split)
+teams_test <- testing(teams_split)
 ```
 
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_pa)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_pa))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+```{r batting-average}
+#Had to make a bunch of adjustments to Jimmy's plots and add some more stuff for
+#analysis purposes. It's the same process for every variable, so I'll just walk
+#through the first one.
+
+#create graph, add linear model trendline
+teams_train %>%
+  ggplot(mapping = aes(x = mean_avg , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+#linear model, note R squared and adjusted R squared
+avg_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_avg, data = teams_train)
+tidy(avg_fit)
+glance(avg_fit)
+
+#residuals analysis
+avg_aug <- augment(avg_fit$fit)
+ggplot(data = avg_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_iso)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_iso))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+```{r slugging-percentage}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_slg , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
+slg_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_slg, data = teams_train)
+tidy(slg_fit)
+glance(slg_fit)
+
+slg_aug <- augment(slg_fit$fit)
+ggplot(data = slg_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
+```{r isolated-power}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_iso , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
+iso_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_slg, data = teams_train)
+tidy(iso_fit)
+glance(iso_fit)
 
-
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_slg)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_slg))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+iso_aug <- augment(iso_fit$fit)
+ggplot(data = iso_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
+```{r batting-average-on-balls-in-play}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_babip , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_babip)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_babip))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+babip_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_babip, data = teams_train)
+tidy(babip_fit)
+glance(babip_fit)
 
+babip_aug <- augment(babip_fit$fit)
+ggplot(data = babip_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
+```{r on-base-percentage}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_obp , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_obp)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_obp))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+obp_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_obp, data = teams_train)
+tidy(obp_fit)
+glance(obp_fit)
 
+obp_aug <- augment(obp_fit$fit)
+ggplot(data = obp_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
+```{r weighted-on-base-average}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_w_oba , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_w_oba)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_w_oba))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+woba_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_w_oba, data = teams_train)
+tidy(woba_fit)
+glance(woba_fit)
 
+woba_aug <- augment(woba_fit$fit)
+ggplot(data = woba_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
+```{r weighted-runs-created}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_w_rc , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_w_rc)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_w_rc))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+wrc_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_w_rc, data = teams_train)
+tidy(wrc_fit)
+glance(wrc_fit)
 
+wrc_aug <- augment(wrc_fit$fit)
+ggplot(data = wrc_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_bsr)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_bsr))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+```{r base-runs}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_bsr , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
+bsr_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_bsr, data = teams_train)
+tidy(bsr_fit)
+glance(bsr_fit)
+
+bsr_aug <- augment(bsr_fit$fit)
+ggplot(data = bsr_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
 
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_off)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_off))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
+```{r offense}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_off , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
 
+off_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_off, data = teams_train)
+tidy(off_fit)
+glance(off_fit)
+
+off_aug <- augment(off_fit$fit)
+ggplot(data = off_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
 ```
-
-```{r}
-teams_cleaned%>%
-  select(win_rate , mean_war)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_war))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
-
-```
-
-```{r}
-teams_cleaned %>%
-  select(win_rate , mean_innings) %>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_innings))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
-
-```
-
-
-
-```{r}
-teams_cleaned %>%
-  select(win_rate , mean_avg)%>%
-  ggplot(data = teams_cleaned , mapping = aes(x =win_rate , y = mean_avg))+
-    geom_point(size = 1.2, alpha = 0.35)+
-    geom_smooth()+
-    facet_wrap(~ teams_cleaned$season )
-
-```
-
-
-
-
-We can find that variables
-(which have directly relashionship with win_rate):
-                         mean_slg
-                         mean_obp
-                         mean_w_oba
-                         mean_w_rc
-                         mean_off
-                         mean_war
-                         
-                         
-                         
-```{r}
-teams_cleaned%>%
-  select(team, mean_slg)%>%
-  group_by(team)%>%
-  arrange(desc(mean_slg))
-
-```
-                         
-                         
-```{r}
-teams_cleaned%>%
-  select(team, mean_obp)%>%
-  group_by(team)%>%
-  arrange(desc(mean_obp))
-
-```                         
-                         
-```{r}
-teams_cleaned%>%
-  select(team, mean_w_oba)%>%
-  group_by(team)%>%
-  arrange(desc(mean_w_oba))
-
-```
-
-
-```{r}
-teams_cleaned%>%
-  select(team, mean_w_rc)%>%
-  group_by(team)%>%
-  arrange(desc(mean_w_rc))
-
-```
-
-
-```{r}
-teams_cleaned%>%
-  select(team, mean_off)%>%
-  group_by(team)%>%
-  arrange(desc(mean_off))
-
-```
-
-
-```{r}
-teams_cleaned%>%
-  select(team, mean_war)%>%
-  group_by(team)%>%
-  arrange(desc(mean_war))
-
-```
-
-
-It is clear that Yankees appears most in the first ten of these varibales.
-
-
-
-
-
-
 
