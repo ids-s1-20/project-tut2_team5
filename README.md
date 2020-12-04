@@ -22,6 +22,8 @@ make is about the code itself. Your results with proper output and
 graphics go in your presentation, this space is for a brief summary of
 your project.
 
+
+
 ## Presentation
 
 Our presentation can be found [here](presentation/presentation.html).
@@ -34,12 +36,6 @@ on proper citation for datasets. If you got your data off the web, make
 sure to note the retrieval date.
 
 ## References
-
-List any references here. You should, at a minimum, list your data
-source.
-
-data pulled from following sources (will write up proper citations
-later):
 
 <https://sabr.org/sabermetrics/>
 

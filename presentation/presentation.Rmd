@@ -320,6 +320,30 @@ R squared resulting from a high number of outliers.
 
 ---
 
+# How good were the predictions?
+
+Finally, we examined how good the predictions by looking at the error from the
+prediction on test samples. For example, this was for WAR.
+
+```{r wins-above-replacement-prediction, echo = FALSE, message = FALSE, result = FALSE}
+war_pred <- predict(war_fit, teams_test) %>%
+  bind_cols(teams_test %>% select(win_rate, mean_war))
+tibble(war_pred)
+
+#Not quite sure how to evaluate the accuracy of these predictions, so I'm going 
+#to look at the difference between predicted and actual, then calculate key 
+#summary statistics.
+war_pred %>%
+  mutate(pred_diff = abs(.pred - win_rate)) -> war_pred2
+```
+
+```{r results, echo = FALSE}
+print(paste("mean prediction error =", mean(war_pred2$pred_diff)))
+print(paste("s.d. of  prediction error =", sd(war_pred2$pred_diff)))
+```
+
+---
+
 class: inverse, center, middle
 
 #THE END 

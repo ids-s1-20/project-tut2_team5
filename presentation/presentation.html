@@ -443,6 +443,40 @@ R squared resulting from a high number of outliers.
 
 ---
 
+# How good were the predictions?
+
+Finally, we examined how good the predictions by looking at the error from the
+prediction on test samples. For example, this was for WAR.
+
+
+```
+## # A tibble: 128 x 3
+##    .pred win_rate mean_war
+##    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 0.541    0.488    2.28 
+##  2 0.484    0.475    1.54 
+##  3 0.564    0.549    2.58 
+##  4 0.437    0.333    0.942
+##  5 0.630    0.630    3.42 
+##  6 0.438    0.447    0.961
+##  7 0.437    0.512    0.939
+##  8 0.512    0.457    1.91 
+##  9 0.500    0.543    1.75 
+## 10 0.534    0.580    2.19 
+## # … with 118 more rows
+```
+
+
+```
+## [1] "mean prediction error = 0.0393167825244069"
+```
+
+```
+## [1] "s.d. of  prediction error = 0.0285418916677667"
+```
+
+---
+
 class: inverse, center, middle
 
 #THE END 
