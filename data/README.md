@@ -188,7 +188,7 @@ More details about the vairables [here](https://blogs.fangraphs.com/glossary/)
 
 - `mean_bsr` : Number of runs above or below average a player has been worth on the bases, based on stolen bases, caught stealing, extra bases taken, outs on the bases, and avoiding double plays.
 
-- `mean_off` : Number of runs above or below average a player has been worth offensively, combining Batting Runs and BsR.
+- `mean_off` : Number of runs above or below average a player has been worth offensively , combining Batting Runs and BsR.
 
 - `mean_war` : A comprehensive statistic that estimates the number of wins a player has been worth to his team compared to a freely available player such as a minor league free agent.(more detail about this variable [here](https://library.fangraphs.com/war/war-position-players/))
 
