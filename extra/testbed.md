@@ -95,7 +95,7 @@ write_csv(teams_batting, "/cloud/project/data/teams-batting.csv")
 ```
 
 ``` r
-teams_source <- read_csv("/cloud/project/data/baseballdatabank-master/core/Teams.csv",
+teams_source <- read_csv("/cloud/project/data/Teams.csv",
                        col_types = cols(
                          .default = col_double(),
                          lgID = col_character(),
