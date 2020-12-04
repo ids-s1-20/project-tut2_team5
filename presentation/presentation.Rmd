@@ -1,6 +1,6 @@
 ---
 title: "SABRmetrics"
-subtitle: "making baseball boring"
+subtitle: "making baseball as much fun as doing your taxes"
 author: "tut2_team5 <br> Mohamad, Adam and Jimmy"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
@@ -25,118 +25,224 @@ library(knitr)
 
 ```{r setup, include=FALSE}
 # For better figure resolution
-knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
+knitr::opts_chunk$set(fig.dpi = 600, fig.asp = 0.618, out.height = "10%")
 ```
 
-```{r load-data, include=FALSE}
-# Load your data here
-```
 
+```{r load-data, echo = FALSE, messages = FALSE, results = FALSE, warning = FALSE, include = FALSE}
+teams_cleaned <- read_csv("/cloud/project/data/teams-cleaned.csv")
+
+#doing training split
+set.seed(3)
+teams_split <- initial_split(teams_cleaned, prop = 0.80)
+teams_train <- training(teams_split)
+teams_test <- testing(teams_split)
+
+#have a lot of NAs for drs and uzr/uzr150/def, so he's something to deal with
+#that:
+teams_train %>%
+  filter(is.na(mean_drs) == FALSE) -> teams_train_drs
+teams_train %>%
+  filter(is.na(mean_uzr) == FALSE) -> teams_train_uzr
+```
 
 class: center, middle
 
-## A statement of the overall goal / research question
+## We will be using SABRmetrics (the empirical analysis of baseball statistics)
+## to look at how effectively different measurements for evaluating individual player performance predict team success.
 
 ---
 
 class: inverse, center, middle
 
-# Section title
+# Data
 
 ---
 
-# Hello World
+# Sources
 
-- Click the `Knit` button to compile your presentation
+- Our data was sourced from [retrosheet.org](retrosheet.org) and [fangraphs.com](fangraphs.com)
 
-- Make sure to commit and push all resulting files to your GitHub repo
+- We considered only the seasons from 1998-2019 because 1998 is after teams starting
+recording data and 1998 is the first season to have 30 teams.
 
+- 2020 data was not considered because the season started later and only 60 games
+were played which is much less than usual.
+
+- The batting and fielding statistics from fangraphs were webscraped from fangraphs.
+
+- The teams win and performance statistics were downloaded from the Chadwick Bureau
+which was originally sourced from retrosheet.
+
+.footnote[
+  All UZR stats provided to fan graphs are courtesy of a legend called Michael Lichtman.
+]
+
+---
+
+# Web scraping + Clean up
+
+.pull-left[
+- Fangraphs, unfortunately does not have ready to download datasets. However, so
+a script was used to retrieve defensive and field statistics from the website.
+
+- The website allows robots. However, it adds a CAPTCHA wall, if you make too
+many requests so the website is not slowed for other users so it and also there
+were many dead links which made the task much harder and take ages.
+
+```{r captcha-demo}
+tryCatch(
+  expr = { 
+    #scrape the data
+  },
+  error =  function(e){ 
+      if(e[1] == "HTTP error 500."){ 
+        #i.e. page does not exist
+        #do not return anything
+      }else{
+        #stop scraping until I manually 
+        #solve the CAPTCHA
+      }
+  }
+)
+```
+
+
+]
+
+.pull-right[
+
+- Fielding and batting stats were scraped for each player for each season.
+
+- which was later summarised into a smaller dataset that contained the weighted
+average for each stat for each team.
+
+- then joined each teams season statistics to the retrosheet's dataframe
+which contained team performance metrics like win rate and whether they won the
+world series or not.
+
+]
+
+---
+
+#Team data
+
+```{r head, echo = FALSE, messages = FALSE}
+kable(head(teams_cleaned[,1:10]), format = "html")
+```
+\+ 10 more cols.
 ---
 
 class: inverse, middle, center
 
-# Using xaringan
+# Data Analysis
 
 ---
 
-# xaringan
+#Data Analysis
 
-- The presentation is created using the `xaringan` package
+- We started by looking at each of the 16 variables separately and their relationship with the 
+win rate. 
 
-- Use `---` to separate slides and `--` for incremental builds
+- and examined the residual vs. fitted plots to assess whether the linear model
+is appropriate.
 
---
+- and evaluated the accuracy of the model predictions.
 
-- Like this
+- Finally, we created a multi variable model.
 
 ---
 
-# Layouts
+class: inverse, center, middle
 
-You can use plain text
+# Single Variable Linear Regression
 
-- or bullet points
+---
+
+# Batting Average (AVG)
 
 .pull-left[
-or text in two columns $^*$
+```{r batting-average, message = FALSE, echo = FALSE}
+#It's the same process for every variable, so I'll just walk
+#through the first one.
+
+#create graph, add linear model trend line
+teams_train %>%
+  ggplot(mapping = aes(x = mean_avg , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+#linear model, note R squared and adjusted R squared
+avg_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_avg, data = teams_train)
+
+kable(tidy(avg_fit), format = "html")
+```
 ]
+
 .pull-right[
-- like
-- this
+```{r res-avg, echo = FALSE, message = FALSE}
+#residuals analysis
+avg_aug <- augment(avg_fit$fit)
+ggplot(data = avg_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+
+kable(glance(avg_fit)[c(1:3)], format = "html")
+```
 ]
 
-.footnote[
-[*] And add footnotes
-]
-
 ---
 
-# Code
-
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
-```
-
----
-
-# Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
-```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
-```
-
----
-
-## Plot and text
+# Slugging Percentage (SLG)
 
 .pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
+```{r slugging-percentage, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_slg , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+slg_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_slg, data = teams_train)
+tidy(slg_fit)
+glance(slg_fit)
 ```
 ]
+
+.pull-right[
+
+]
+
+---
+
+# Isolated Power (ISO)
+
+```{r isolated-power, echo = FALSE}
+teams_train %>%
+  ggplot(mapping = aes(x = mean_iso , y = win_rate)) +
+  geom_point(size = 1.2, alpha = 0.35) +
+  geom_smooth(method = "lm")
+
+iso_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(win_rate ~ mean_iso, data = teams_train)
+tidy(iso_fit)
+glance(iso_fit)
+
+iso_aug <- augment(iso_fit$fit)
+ggplot(data = iso_aug,
+       aes(x = .fitted,
+           y = .resid)) +
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed")
+```
 
 ---
 
